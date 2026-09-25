@@ -1,0 +1,16 @@
+{
+  "name": "github-briefing",
+  "version": "0.1.0",
+  "description": "A morning briefing across every GitHub notification, not one repo. What is urgent, who pinged you where and whether you answered, what you have ignored too long, and everything that happened in chronological order. Publishes a clickable page.",
+  "author": {
+    "name": "Skarlso",
+    "url": "https://github.com/Skarlso"
+  },
+  "homepage": "https://github.com/Skarlso/personal-github-update",
+  "keywords": [
+    "github",
+    "notifications",
+    "triage",
+    "maintainer"
+  ]
+}

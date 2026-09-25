@@ -1,0 +1,426 @@
+<title>__TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F4F7F6; --surface:#FFFFFF; --surface-2:#EDF2F1; --surface-3:#E2EAE9;
+  --ink:#101D1C; --ink-2:#3F5351; --ink-3:#6C817E;
+  --line:#D9E3E1; --line-2:#E8EEED;
+  --accent:#0B6E75; --accent-soft:#E0F0F1; --accent-line:#A6D2D5;
+  --add:#15803D; --add-soft:#E6F5EC; --del:#B3261E; --del-soft:#FBEAE8;
+  --warn:#8A5A00; --warn-soft:#FAF1DF;
+  --shadow:0 1px 2px rgba(16,29,28,.05), 0 10px 30px -20px rgba(16,29,28,.3);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0A1214; --surface:#0F1A1C; --surface-2:#152326; --surface-3:#1C2D30;
+    --ink:#E7EEEC; --ink-2:#A4B6B3; --ink-3:#728683;
+    --line:#203033; --line-2:#182629;
+    --accent:#58CDD4; --accent-soft:#0F2A2D; --accent-line:#1E474B;
+    --add:#4ADE80; --add-soft:#0E2418; --del:#F4877C; --del-soft:#2A1513;
+    --warn:#E0AC58; --warn-soft:#2A2113;
+    --shadow:0 1px 2px rgba(0,0,0,.45), 0 10px 30px -20px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0A1214; --surface:#0F1A1C; --surface-2:#152326; --surface-3:#1C2D30;
+  --ink:#E7EEEC; --ink-2:#A4B6B3; --ink-3:#728683;
+  --line:#203033; --line-2:#182629;
+  --accent:#58CDD4; --accent-soft:#0F2A2D; --accent-line:#1E474B;
+  --add:#4ADE80; --add-soft:#0E2418; --del:#F4877C; --del-soft:#2A1513;
+  --warn:#E0AC58; --warn-soft:#2A2113;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 10px 30px -20px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent)}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.88em}
+code{background:var(--surface-2); padding:1px 5px; border-radius:4px; color:var(--ink)}
+
+.wrap{max-width:1000px; margin:0 auto; padding:0 26px}
+.prose{max-width:68ch}
+section{padding:40px 0; border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+
+h1,h2,h3{font-family:Fraunces,Georgia,serif; text-wrap:balance; margin:0}
+h1{font-weight:600; font-size:clamp(30px,4.6vw,46px); line-height:1.08; letter-spacing:-.02em}
+h2{font-weight:600; font-size:25px; letter-spacing:-.012em; line-height:1.2}
+h3{font-weight:600; font-size:17px; letter-spacing:-.006em}
+.kicker{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--ink-3); margin-bottom:14px;
+}
+.shead{display:flex; align-items:baseline; gap:14px; margin-bottom:20px; flex-wrap:wrap}
+.shead p{margin:0; color:var(--ink-3); font-size:14px; max-width:46ch}
+
+/* ---- masthead ------------------------------------------------------ */
+.masthead{background:var(--surface); border-bottom:1px solid var(--line)}
+.masthead .wrap{padding-top:34px; padding-bottom:30px}
+.crumb{
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--ink-3);
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px;
+}
+.pill{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:500; letter-spacing:.05em;
+  text-transform:uppercase; padding:3px 9px; border-radius:20px;
+  border:1px solid var(--line); color:var(--ink-3); background:var(--surface-2);
+}
+.pill.open{color:var(--add); background:var(--add-soft); border-color:var(--add)}
+.pill.merged{color:var(--accent); background:var(--accent-soft); border-color:var(--accent-line)}
+.pill.closed{color:var(--del); background:var(--del-soft); border-color:var(--del)}
+.byline{margin-top:16px; color:var(--ink-2); font-size:15px}
+.byline b{color:var(--ink); font-weight:600}
+
+.numbers{display:flex; flex-wrap:wrap; gap:0 34px; margin-top:22px}
+.num .v{font-family:Fraunces,serif; font-weight:600; font-size:27px; line-height:1.1; letter-spacing:-.02em}
+.num .k{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
+.num .v .plus{color:var(--add)} .num .v .minus{color:var(--del)}
+
+/* ---- nav ----------------------------------------------------------- */
+nav{
+  position:sticky; top:0; z-index:30; background:var(--ground);
+  border-bottom:1px solid var(--line); overflow-x:auto;
+}
+nav .wrap{display:flex; gap:4px; padding-top:7px; padding-bottom:7px}
+nav a{
+  font-size:13px; font-weight:500; color:var(--ink-2); text-decoration:none;
+  padding:5px 11px; border-radius:7px; white-space:nowrap;
+}
+nav a:hover{background:var(--surface-2); color:var(--ink)}
+
+/* ---- lede ---------------------------------------------------------- */
+.lede{font-family:Fraunces,Georgia,serif; font-size:21px; line-height:1.5; color:var(--ink); max-width:62ch}
+.lede + .lede{margin-top:16px}
+.body p{margin:0 0 15px}
+.body p:last-child{margin-bottom:0}
+.verdict{
+  margin-top:22px; padding:14px 18px; border-radius:10px;
+  background:var(--accent-soft); border:1px solid var(--accent-line);
+  font-size:15px; color:var(--ink-2); max-width:64ch;
+}
+.verdict b{display:block; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--accent); margin-bottom:4px}
+
+/* ---- figures / svg ------------------------------------------------- */
+figure{margin:0 0 26px}
+figure:last-child{margin-bottom:0}
+.figbox{
+  background:var(--surface); border:1px solid var(--line); border-radius:12px;
+  padding:16px; overflow-x:auto; box-shadow:var(--shadow);
+}
+svg.graph{display:block; max-width:100%; height:auto; min-width:520px; color:var(--ink-3)}
+svg.graph.map{min-width:640px}
+figcaption{margin-top:11px; font-size:13.5px; color:var(--ink-3); max-width:66ch}
+.node{fill:var(--surface-2); stroke:var(--line); stroke-width:1.5}
+.node.new{fill:var(--accent-soft); stroke:var(--accent); stroke-width:2}
+.node.changed{fill:var(--surface-2); stroke:var(--accent-line); stroke-width:2; stroke-dasharray:5 3}
+.node.external{fill:none; stroke:var(--line); stroke-dasharray:2 3}
+.nlabel{fill:var(--ink); font-family:"IBM Plex Sans",sans-serif; font-size:13px; font-weight:500}
+.nlabel.new{fill:var(--accent)}
+.nnote{fill:var(--ink-3); font-family:"IBM Plex Mono",monospace; font-size:10.5px}
+.edge{fill:none; stroke:currentColor; stroke-width:1.4}
+.edge.new{stroke:var(--accent); stroke-width:2}
+.eplate{fill:var(--surface); stroke:none}
+.elabel{fill:var(--ink-3); font-family:"IBM Plex Mono",monospace; font-size:10.5px}
+.elabel.new{fill:var(--accent)}
+.maplabel{fill:var(--ink-2); font-family:"IBM Plex Mono",monospace; font-size:12px}
+.mapnum{fill:var(--ink-3); font-family:"IBM Plex Mono",monospace; font-size:11px}
+.badd{fill:var(--add)} .bdel{fill:var(--del)}
+.legend{display:flex; gap:18px; flex-wrap:wrap; margin-top:12px; font-size:12.5px; color:var(--ink-3)}
+.legend span{display:flex; align-items:center; gap:7px}
+.sw{width:13px; height:13px; border-radius:3px; border:1.5px solid var(--line); background:var(--surface-2)}
+.sw.new{background:var(--accent-soft); border-color:var(--accent)}
+.sw.add{background:var(--add); border-color:var(--add)}
+.sw.del{background:var(--del); border-color:var(--del)}
+
+/* ---- themes -------------------------------------------------------- */
+.themes{display:flex; flex-direction:column; gap:12px}
+.theme{
+  background:var(--surface); border:1px solid var(--line); border-radius:12px;
+  box-shadow:var(--shadow); overflow:hidden;
+}
+.thead{padding:16px 20px; cursor:pointer; display:grid; grid-template-columns:1fr auto; gap:6px 16px; align-items:start}
+.thead:hover{background:var(--surface-2)}
+.thead .purpose{color:var(--ink-2); font-size:14.5px; margin-top:5px; max-width:62ch}
+.thead .churn{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink-3); white-space:nowrap; text-align:right}
+.thead .churn .plus{color:var(--add)} .thead .churn .minus{color:var(--del)}
+.tbody{display:none; padding:2px 20px 18px; border-top:1px solid var(--line-2)}
+.theme.open .tbody{display:block}
+.theme.open .thead{background:var(--surface-2)}
+.tbody .detail{margin:14px 0 16px; color:var(--ink-2); font-size:15px; max-width:66ch}
+.flist{display:flex; flex-direction:column; gap:0}
+.frow{display:grid; grid-template-columns:1fr auto; gap:4px 16px; padding:10px 0; border-bottom:1px solid var(--line-2)}
+.frow:last-child{border-bottom:0}
+.frow .p{font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--ink); word-break:break-all}
+.frow .p .dir{color:var(--ink-3)}
+.frow .note{font-size:14px; color:var(--ink-2); grid-column:1; max-width:64ch}
+.frow .st{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-3); white-space:nowrap; text-align:right}
+.frow .st .plus{color:var(--add)} .frow .st .minus{color:var(--del)}
+.tag{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase;
+  padding:1px 6px; border-radius:4px; background:var(--surface-2); border:1px solid var(--line); color:var(--ink-3); margin-left:7px}
+.tag.new{color:var(--accent); background:var(--accent-soft); border-color:var(--accent-line)}
+.tag.src{text-decoration:none; color:var(--ink-3)}
+.tag.src:hover{color:var(--accent); border-color:var(--accent-line)}
+.frow .p a{color:var(--ink); text-decoration-color:var(--line)}
+.frow .p a:hover{color:var(--accent); text-decoration-color:currentColor}
+.step .paths a{text-decoration:none}
+.step .paths a:hover code{border-color:var(--accent-line); color:var(--accent)}
+.thread .c .src{border:0; padding:0; margin-left:4px; font-size:12px}
+
+/* ---- reading order ------------------------------------------------- */
+.steps{counter-reset:s; display:flex; flex-direction:column; gap:2px; position:relative}
+.step{display:grid; grid-template-columns:38px 1fr; gap:18px; padding:16px 0; border-bottom:1px solid var(--line-2)}
+.step:last-child{border-bottom:0}
+.step .n{
+  counter-increment:s; font-family:Fraunces,serif; font-weight:600; font-size:19px;
+  color:var(--accent); text-align:center; line-height:1.3;
+}
+.step .n::before{content:counter(s)}
+.step h3{margin-bottom:4px}
+.step .why{color:var(--ink-2); font-size:15px; max-width:64ch}
+.step .paths{display:flex; flex-wrap:wrap; gap:6px; margin-top:9px}
+.step .paths code{font-size:11.5px; background:var(--surface-2); border:1px solid var(--line-2)}
+.step .mins{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--ink-3); margin-top:7px}
+
+/* ---- questions / glossary ------------------------------------------ */
+.qs{display:flex; flex-direction:column; gap:14px}
+.q{border-left:3px solid var(--warn); padding:2px 0 2px 16px}
+.q h3{font-family:"IBM Plex Sans",sans-serif; font-weight:600; font-size:16px; letter-spacing:0}
+.q p{margin:5px 0 0; color:var(--ink-2); font-size:15px; max-width:66ch}
+.q .where{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-3); margin-top:6px}
+.gloss{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:1px; background:var(--line);
+  border:1px solid var(--line); border-radius:12px; overflow:hidden}
+.gitem{background:var(--surface); padding:14px 18px}
+.gitem dt{font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:500; color:var(--accent)}
+.gitem dd{margin:4px 0 0; font-size:14.5px; color:var(--ink-2)}
+
+/* ---- threads / commits --------------------------------------------- */
+.thread{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px 18px; margin-bottom:10px}
+.thread .loc{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink-3); margin-bottom:8px}
+.thread .c{font-size:14.5px; color:var(--ink-2); padding:6px 0; border-top:1px solid var(--line-2)}
+.thread .c:first-of-type{border-top:0}
+.thread .c b{color:var(--ink); font-family:"IBM Plex Mono",monospace; font-size:12.5px; font-weight:500}
+details.commits{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:0 18px}
+details.commits summary{cursor:pointer; padding:14px 0; font-weight:600; font-size:15px}
+details.commits[open] summary{border-bottom:1px solid var(--line-2)}
+.clist{display:flex; flex-direction:column; padding:6px 0 14px}
+.crow{display:grid; grid-template-columns:auto 1fr auto; gap:14px; padding:7px 0; font-size:14px; align-items:baseline}
+.crow .sha{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-3)}
+.crow .st{font-family:"IBM Plex Mono",monospace; font-size:11.5px; white-space:nowrap}
+.crow .st .plus{color:var(--add)} .crow .st .minus{color:var(--del)}
+
+footer{padding:30px 0 70px; color:var(--ink-3); font-size:13px; border-top:1px solid var(--line)}
+footer a{color:var(--ink-3)}
+@media (max-width:640px){
+  .thead,.frow{grid-template-columns:1fr}
+  .thead .churn,.frow .st{text-align:left}
+  .step{grid-template-columns:26px 1fr; gap:12px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<header class="masthead"><div class="wrap">
+  <div class="crumb" id="crumb"></div>
+  <h1 id="title"></h1>
+  <div class="byline" id="byline"></div>
+  <div class="numbers" id="numbers"></div>
+</div></header>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<div class="wrap" id="main"></div>
+
+<footer><div class="wrap" id="foot"></div></footer>
+
+<script id="pr-data" type="application/json">__DATA__</script>
+<script>
+const D = JSON.parse(document.getElementById('pr-data').textContent);
+const pr = D.pr, ex = D.ex, S = D.stats;
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// paragraph + `code` + **bold** only; no arbitrary HTML from the notes file
+function rich(t){
+  return esc(t || '').split(/\n{2,}/).map(p =>
+    '<p>' + p.replace(/\n/g, ' ')
+             .replace(/`([^`]+)`/g, (_, c) => '<code>' + c + '</code>')
+             .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') + '</p>').join('');
+}
+const splitPath = p => {
+  const i = String(p).lastIndexOf('/');
+  return i < 0 ? esc(p) : '<span class="dir">' + esc(p.slice(0, i + 1)) + '</span>' + esc(p.slice(i + 1));
+};
+const fmtDate = s => s ? new Date(s).toLocaleDateString([], {month:'short', day:'numeric', year:'numeric'}) : '';
+
+/* ---- masthead ---------------------------------------------------- */
+const state = (pr.draft ? 'draft' : pr.state).toLowerCase();
+document.getElementById('crumb').innerHTML =
+  '<a href="https://github.com/' + esc(pr.repo) + '">' + esc(pr.repo) + '</a>' +
+  '<span>/</span><a href="' + esc(pr.url) + '">#' + pr.number + '</a>' +
+  '<span class="pill ' + esc(state) + '">' + esc(state) + '</span>' +
+  (pr.labels || []).map(l => '<span class="pill">' + esc(l) + '</span>').join('');
+document.getElementById('title').textContent = pr.title;
+document.getElementById('byline').innerHTML =
+  'by <b>@' + esc(pr.author) + '</b> · opened ' + esc(fmtDate(pr.created_at)) +
+  ' · <code>' + esc(pr.head) + '</code> → <code>' + esc(pr.base) + '</code>' +
+  (pr.language ? ' · ' + esc(pr.language) : '');
+
+document.getElementById('numbers').innerHTML = [
+  ['<span class="plus">+' + pr.additions.toLocaleString() + '</span> / <span class="minus">−' + pr.deletions.toLocaleString() + '</span>', 'lines'],
+  [pr.changed_files, 'files changed'],
+  [S.source, 'source files'],
+  [S.tests + ' <span style="color:var(--ink-3);font-size:16px">(+' + S.test_lines.toLocaleString() + ')</span>', 'test files'],
+  [S.docs, 'doc files'],
+  [S.commits, 'commits']
+].map(([v, k]) => '<div class="num"><div class="v">' + v + '</div><div class="k">' + k + '</div></div>').join('');
+
+/* ---- sections ---------------------------------------------------- */
+const sections = [];
+function add(id, label, html){ if(html) sections.push({id, label, html}); }
+
+add('summary', 'Summary',
+  '<div class="prose">' +
+  (ex.one_paragraph ? '<div class="lede">' + esc(ex.one_paragraph) + '</div>' : '') +
+  (ex.size_verdict ? '<div class="verdict"><b>Is it as big as it looks?</b>' + esc(ex.size_verdict) + '</div>' : '') +
+  '</div>');
+
+let whyHtml = ex.why ? '<div class="prose body">' + rich(ex.why) + '</div>' : '';
+if((D.linked_issues || []).length){
+  whyHtml += '<div class="prose" style="margin-top:18px">' + D.linked_issues.map(i =>
+    '<div class="q" style="border-left-color:var(--accent-line)"><h3><a href="' + esc(i.url) + '">#' + i.number + ' ' + esc(i.title) + '</a></h3></div>').join('') + '</div>';
+}
+add('why', 'Why', whyHtml);
+
+if((D.diagrams || []).length){
+  add('architecture', 'Architecture', D.diagrams.map(d =>
+    '<figure><div class="figbox">' + d.svg + '</div>' +
+    (d.caption ? '<figcaption>' + esc(d.caption) + '</figcaption>' : '') + '</figure>').join('') +
+    '<div class="legend"><span><i class="sw new"></i>added by this PR</span>' +
+    '<span><i class="sw"></i>existing, touched or not</span></div>');
+}
+
+if(D.changemap){
+  add('map', 'Where it lands',
+    '<figure><div class="figbox">' + D.changemap + '</div>' +
+    '<figcaption>Lines changed per area of the repository. Green is added, red removed.</figcaption></figure>' +
+    '<div class="legend"><span><i class="sw add"></i>added</span><span><i class="sw del"></i>removed</span></div>');
+}
+
+if((ex.themes || []).length){
+  add('changes', 'What changed', '<div class="themes">' + ex.themes.map((t, n) => {
+    const fs = (t.files || []).map(f => D.files[f.path] ? Object.assign({}, D.files[f.path], {note: f.note}) : {path: f.path, note: f.note, add: 0, del: 0, change: ''});
+    const a = fs.reduce((x, f) => x + (f.add || 0), 0), d = fs.reduce((x, f) => x + (f.del || 0), 0);
+    return '<article class="theme" data-i="' + n + '">' +
+      '<div class="thead" role="button" tabindex="0" aria-expanded="false">' +
+        '<div><h3>' + esc(t.name) + '</h3>' +
+        (t.purpose ? '<div class="purpose">' + esc(t.purpose) + '</div>' : '') + '</div>' +
+        '<div class="churn"><span class="plus">+' + a + '</span> / <span class="minus">−' + d + '</span><br>' + fs.length + ' files</div>' +
+      '</div>' +
+      '<div class="tbody">' +
+        (t.detail ? '<div class="detail">' + rich(t.detail) + '</div>' : '') +
+        '<div class="flist">' + fs.map(f =>
+          '<div class="frow"><div class="p">' +
+          (f.diff ? '<a href="' + esc(f.diff) + '" title="this file in the PR diff">' + splitPath(f.path) + '</a>' : splitPath(f.path)) +
+          (f.change === 'added' ? '<span class="tag new">new</span>' :
+           f.change === 'removed' ? '<span class="tag">deleted</span>' :
+           f.change === 'renamed' ? '<span class="tag">renamed</span>' : '') +
+          (f.blob ? ' <a class="tag src" href="' + esc(f.blob) + '" title="the whole file at this commit">source</a>' : '') +
+          '</div><div class="st"><span class="plus">+' + (f.add || 0) + '</span> <span class="minus">−' + (f.del || 0) + '</span></div>' +
+          (f.note ? '<div class="note">' + esc(f.note) + '</div>' : '') + '</div>').join('') +
+        '</div>' +
+      '</div></article>';
+  }).join('') + '</div>');
+}
+
+if((ex.reading_order || []).length){
+  add('read', 'How to read it', '<div class="steps">' + ex.reading_order.map(s =>
+    '<div class="step"><div class="n"></div><div>' +
+      '<h3>' + esc(s.title) + '</h3>' +
+      (s.why ? '<div class="why">' + esc(s.why) + '</div>' : '') +
+      ((s.paths || []).length ? '<div class="paths">' + s.paths.map(p => {
+        const f = D.files[p];
+        return f && f.diff ? '<a href="' + esc(f.diff) + '"><code>' + esc(p) + '</code></a>' : '<code>' + esc(p) + '</code>';
+      }).join('') + '</div>' : '') +
+      (s.minutes ? '<div class="mins">~' + esc(s.minutes) + ' min</div>' : '') +
+    '</div></div>').join('') + '</div>');
+}
+
+if((ex.questions || []).length){
+  add('questions', 'Questions to ask', '<div class="qs">' + ex.questions.map(q =>
+    '<div class="q"><h3>' + esc(q.q) + '</h3>' +
+    (q.why ? '<p>' + esc(q.why) + '</p>' : '') +
+    (q.where ? '<div class="where">' + (D.files[q.where] ? '<a href="' + esc(D.files[q.where].diff) + '">' + esc(q.where) + '</a>' : esc(q.where)) + '</div>' : '') + '</div>').join('') + '</div>');
+}
+
+if((ex.glossary || []).length){
+  add('vocab', 'Vocabulary', '<dl class="gloss">' + ex.glossary.map(g =>
+    '<div class="gitem"><dt>' + esc(g.term) + '</dt><dd>' + esc(g.meaning) + '</dd></div>').join('') + '</dl>');
+}
+
+if((D.threads || []).length){
+  add('open', 'Open threads', D.threads.map(t =>
+    '<div class="thread"><div class="loc">' +
+    (t.comments[0] && t.comments[0].url
+      ? '<a href="' + esc(t.comments[0].url) + '">' + esc(t.path || 'thread') + (t.line ? ':' + t.line : '') + '</a>'
+      : esc(t.path || '') + (t.line ? ':' + t.line : '')) +
+    (t.outdated ? ' · outdated' : '') + '</div>' +
+    t.comments.map(c => '<div class="c"><b>@' + esc(c.by) + '</b> ' + esc((c.body || '').slice(0, 400)) +
+      (c.url ? ' <a class="src" href="' + esc(c.url) + '">↗</a>' : '') + '</div>').join('') +
+    '</div>').join(''));
+}
+
+add('commits', 'Commits',
+  '<details class="commits"><summary>' + D.commits.length + ' commits</summary><div class="clist">' +
+  D.commits.map(c => '<div class="crow">' +
+    '<a class="sha" href="' + esc(D.repo_url) + '/commit/' + esc(c.sha) + '">' + esc(c.sha) + '</a>' +
+    '<span>' + esc(c.headline) + '</span>' +
+    '<span class="st"><span class="plus">+' + c.add + '</span> <span class="minus">−' + c.del + '</span></span></div>').join('') +
+  '</div></details>');
+
+const HEAD = {
+  summary: 'The short version', why: 'Why this exists', architecture: 'How it fits together',
+  map: 'Where the change lands', changes: 'What changed, by theme', read: 'How to read it',
+  questions: 'Questions worth asking', vocab: 'Vocabulary', open: 'Unresolved review threads',
+  commits: 'Commit history'
+};
+const SUB = {
+  changes: 'Every changed file, grouped by what it is for. Click a theme to open it.',
+  read: 'A path through the diff that builds understanding in order, instead of alphabetically.',
+  vocab: 'Terms this PR assumes you already know.'
+};
+
+document.getElementById('main').innerHTML = sections.map(s =>
+  '<section id="' + s.id + '"><div class="shead"><h2>' + esc(HEAD[s.id] || s.label) + '</h2>' +
+  (SUB[s.id] ? '<p>' + esc(SUB[s.id]) + '</p>' : '') + '</div>' + s.html + '</section>').join('');
+document.getElementById('nav').innerHTML = sections.map(s =>
+  '<a href="#' + s.id + '">' + esc(s.label) + '</a>').join('');
+document.getElementById('foot').innerHTML =
+  'Generated ' + esc(new Date(D.generated_at).toLocaleString()) +
+  ' · <a href="' + esc(pr.url) + '">' + esc(pr.repo) + ' #' + pr.number + ' on GitHub</a>' +
+  ' · every file path, commit, and quote on this page links to its source on GitHub';
+
+/* ---- interactions ------------------------------------------------ */
+function toggle(h){
+  const t = h.closest('.theme');
+  t.classList.toggle('open');
+  h.setAttribute('aria-expanded', t.classList.contains('open'));
+}
+document.addEventListener('click', e => {
+  const h = e.target.closest('.thead');
+  if(h && !e.target.closest('a')) toggle(h);
+});
+document.addEventListener('keydown', e => {
+  if((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('thead')){
+    e.preventDefault(); toggle(e.target);
+  }
+});
+const first = document.querySelector('.theme');
+if(first) first.classList.add('open'), first.querySelector('.thead').setAttribute('aria-expanded', 'true');
+</script>

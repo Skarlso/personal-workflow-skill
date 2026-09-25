@@ -1,0 +1,37 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
+  "name": "personal-github-update",
+  "description": "Skills for maintainers drowning in GitHub: a morning triage briefing across every notification, and an architectural explainer for one large PR.",
+  "owner": {
+    "name": "Skarlso",
+    "url": "https://github.com/Skarlso"
+  },
+  "plugins": [
+    {
+      "name": "github-briefing",
+      "description": "A morning briefing across every GitHub notification, not one repo. What is urgent, who pinged you where and whether you answered, what you have ignored too long, and everything that happened in chronological order. Publishes a clickable page.",
+      "source": "./plugins/github-briefing",
+      "category": "productivity",
+      "keywords": [
+        "github",
+        "notifications",
+        "triage",
+        "maintainer",
+        "inbox"
+      ]
+    },
+    {
+      "name": "explain-pr",
+      "description": "Architectural explainer for one pull request: what it does, why, how it fits together, where the change lands, and a reading order that makes a 4000-line diff tractable.",
+      "source": "./plugins/explain-pr",
+      "category": "productivity",
+      "keywords": [
+        "github",
+        "pull-request",
+        "code-review",
+        "diagrams",
+        "onboarding"
+      ]
+    }
+  ]
+}

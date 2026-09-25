@@ -1,0 +1,16 @@
+{
+  "name": "explain-pr",
+  "version": "0.1.0",
+  "description": "Architectural explainer for one pull request: what it does, why, how it fits together, where the change lands, and a reading order that makes a 4000-line diff tractable.",
+  "author": {
+    "name": "Skarlso",
+    "url": "https://github.com/Skarlso"
+  },
+  "homepage": "https://github.com/Skarlso/personal-github-update",
+  "keywords": [
+    "github",
+    "pull-request",
+    "diagrams",
+    "onboarding"
+  ]
+}

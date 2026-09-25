@@ -1,0 +1,470 @@
+<title>__TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ground:#F2F4F8; --surface:#FFFFFF; --surface-2:#F7F8FC; --surface-3:#ECEFF6;
+  --ink:#10131C; --ink-2:#454C5E; --ink-3:#6E7689;
+  --line:#DFE3EC; --line-2:#EBEEF5;
+  --accent:#4A46C7; --accent-soft:#EDECFB; --accent-line:#C7C4F0;
+  --crit:#B5352A; --crit-soft:#FBEBE9; --crit-line:#EEC2BC;
+  --warn:#8A5800; --warn-soft:#FAF0DC; --warn-line:#E8D4A8;
+  --ok:#177044; --ok-soft:#E6F4EC; --ok-line:#B8DEC8;
+  --shadow:0 1px 2px rgba(16,19,28,.05), 0 8px 24px -16px rgba(16,19,28,.22);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0C0E15; --surface:#14171F; --surface-2:#191D26; --surface-3:#222734;
+    --ink:#EDEFF5; --ink-2:#AEB5C6; --ink-3:#7C8498;
+    --line:#262B38; --line-2:#1D212B;
+    --accent:#9B97F7; --accent-soft:#1E1C38; --accent-line:#34305C;
+    --crit:#F0897D; --crit-soft:#2C1917; --crit-line:#4A2723;
+    --warn:#DFAC58; --warn-soft:#292013; --warn-line:#453520;
+    --ok:#5FCB92; --ok-soft:#12271C; --ok-line:#1F4431;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0C0E15; --surface:#14171F; --surface-2:#191D26; --surface-3:#222734;
+  --ink:#EDEFF5; --ink-2:#AEB5C6; --ink-3:#7C8498;
+  --line:#262B38; --line-2:#1D212B;
+  --accent:#9B97F7; --accent-soft:#1E1C38; --accent-line:#34305C;
+  --crit:#F0897D; --crit-soft:#2C1917; --crit-line:#4A2723;
+  --warn:#DFAC58; --warn-soft:#292013; --warn-line:#453520;
+  --ok:#5FCB92; --ok-soft:#12271C; --ok-line:#1F4431;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"Public Sans",ui-sans-serif,system-ui,sans-serif;
+  font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent); text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums}
+
+.wrap{max-width:1120px; margin:0 auto; padding:0 24px 88px}
+
+/* ---- masthead ---------------------------------------------------- */
+.masthead{border-bottom:1px solid var(--line); background:var(--surface); margin-bottom:28px}
+.masthead .wrap{padding-top:30px; padding-bottom:26px}
+.eyebrow{
+  font-family:"JetBrains Mono",monospace; font-size:11px; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
+  display:flex; flex-wrap:wrap; gap:6px 14px; align-items:center;
+}
+h1{
+  font-family:Archivo,ui-sans-serif,sans-serif; font-weight:700;
+  font-size:clamp(28px,4.4vw,42px); line-height:1.04; letter-spacing:-.025em;
+  margin:12px 0 0; text-wrap:balance;
+}
+h1 .dim{color:var(--ink-3); font-weight:500}
+
+.lede{
+  margin-top:18px; display:grid; grid-template-columns:4px 1fr; gap:16px;
+  align-items:stretch; max-width:74ch;
+}
+.lede .bar{background:var(--accent); border-radius:2px}
+.lede p{margin:0; font-size:17px; color:var(--ink-2)}
+.lede strong{color:var(--ink); font-weight:600}
+
+/* ---- stat strip -------------------------------------------------- */
+.stats{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(118px,1fr));
+  gap:1px; background:var(--line); border:1px solid var(--line);
+  border-radius:10px; overflow:hidden; margin-bottom:24px;
+}
+.stat{background:var(--surface); padding:13px 16px}
+.stat .n{font-family:Archivo,sans-serif; font-weight:700; font-size:26px; line-height:1.1; letter-spacing:-.02em}
+.stat .l{font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3); margin-top:2px; font-weight:500}
+.stat.hot .n{color:var(--crit)}
+.stat.warm .n{color:var(--warn)}
+.stat.good .n{color:var(--ok)}
+
+/* ---- toolbar ----------------------------------------------------- */
+.toolbar{
+  position:sticky; top:0; z-index:20; background:var(--ground);
+  padding:10px 0 12px; margin-bottom:18px;
+  display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+  border-bottom:1px solid var(--line-2);
+}
+.seg{display:flex; background:var(--surface-3); border-radius:8px; padding:3px; gap:2px}
+.seg button{
+  font:inherit; font-size:13px; font-weight:600; border:0; cursor:pointer;
+  background:transparent; color:var(--ink-2); padding:5px 13px; border-radius:6px;
+}
+.seg button[aria-pressed="true"]{background:var(--surface); color:var(--ink); box-shadow:var(--shadow)}
+input[type="search"],select{
+  font:inherit; font-size:13px; color:var(--ink); background:var(--surface);
+  border:1px solid var(--line); border-radius:8px; padding:7px 11px;
+}
+input[type="search"]{flex:1; min-width:180px}
+.count{margin-left:auto; font-size:12px; color:var(--ink-3)}
+.count.mono{letter-spacing:.02em}
+
+/* ---- sections ---------------------------------------------------- */
+.group{margin-bottom:34px}
+.group.empty{display:none}
+.ghead{display:flex; align-items:baseline; gap:12px; margin-bottom:12px; padding-bottom:9px; border-bottom:1px solid var(--line)}
+.ghead h2{
+  font-family:Archivo,sans-serif; font-size:16px; font-weight:600; letter-spacing:-.01em;
+  margin:0; display:flex; align-items:center; gap:9px;
+}
+.ghead .pip{width:9px; height:9px; border-radius:50%; flex:none}
+.ghead .sub{font-size:13px; color:var(--ink-3); margin-left:auto; text-align:right}
+
+.rows{display:flex; flex-direction:column; gap:9px}
+
+/* ---- item card --------------------------------------------------- */
+.item{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  box-shadow:var(--shadow); overflow:hidden; position:relative;
+}
+.item::before{content:""; position:absolute; inset:0 auto 0 0; width:3px; background:var(--line)}
+.item[data-sev="crit"]::before{background:var(--crit)}
+.item[data-sev="warn"]::before{background:var(--warn)}
+.item[data-sev="ok"]::before{background:var(--ok)}
+.item[data-sev="accent"]::before{background:var(--accent)}
+.item.hidden{display:none}
+
+.head{
+  display:grid; grid-template-columns:1fr auto; gap:4px 14px;
+  padding:13px 16px 13px 19px; cursor:pointer; align-items:start;
+}
+.head:hover{background:var(--surface-2)}
+.crumb{
+  font-family:"JetBrains Mono",monospace; font-size:11.5px; color:var(--ink-3);
+  display:flex; flex-wrap:wrap; gap:7px; align-items:center;
+}
+.crumb .num{color:var(--ink-2); font-weight:500}
+.ttl{
+  font-family:Archivo,sans-serif; font-weight:600; font-size:15.5px; letter-spacing:-.008em;
+  margin:3px 0 0; color:var(--ink); text-wrap:balance;
+}
+.ttl a{color:inherit}
+.meta{font-size:13px; color:var(--ink-2); margin-top:5px}
+.meta b{font-weight:600; color:var(--ink)}
+.note{
+  font-size:13.5px; color:var(--ink-2); margin-top:7px; padding-left:11px;
+  border-left:2px solid var(--accent-line);
+}
+.right{display:flex; flex-direction:column; align-items:flex-end; gap:6px}
+.age{font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--ink-3); white-space:nowrap}
+
+.chips{display:flex; flex-wrap:wrap; gap:5px; margin-top:8px}
+.chip{
+  font-family:"JetBrains Mono",monospace; font-size:10.5px; font-weight:500;
+  letter-spacing:.03em; padding:2px 7px; border-radius:5px;
+  border:1px solid var(--line); color:var(--ink-3); background:var(--surface-2);
+  white-space:nowrap;
+}
+.chip.crit{color:var(--crit); background:var(--crit-soft); border-color:var(--crit-line)}
+.chip.warn{color:var(--warn); background:var(--warn-soft); border-color:var(--warn-line)}
+.chip.ok{color:var(--ok); background:var(--ok-soft); border-color:var(--ok-line)}
+.chip.accent{color:var(--accent); background:var(--accent-soft); border-color:var(--accent-line)}
+
+.body{display:none; padding:0 16px 15px 19px; border-top:1px solid var(--line-2)}
+.item.open .body{display:block}
+.item.open .head{background:var(--surface-2)}
+.thread{display:flex; flex-direction:column; gap:0; margin-top:13px}
+.ev{display:grid; grid-template-columns:auto 1fr; gap:11px; padding:9px 0; border-bottom:1px solid var(--line-2)}
+.ev:last-child{border-bottom:0}
+.ev .who{font-family:"JetBrains Mono",monospace; font-size:12px; font-weight:500; white-space:nowrap; color:var(--ink-2)}
+.ev.you .who{color:var(--accent)}
+.ev .when{font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--ink-3); display:block; font-weight:400}
+.ev .what{font-size:13.5px; color:var(--ink-2)}
+.ev .what em{color:var(--ink); font-style:normal; background:var(--accent-soft); padding:0 3px; border-radius:3px}
+.actions{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+.btn{
+  font-size:12.5px; font-weight:600; padding:6px 12px; border-radius:7px;
+  border:1px solid var(--line); background:var(--surface-2); color:var(--ink-2);
+}
+.btn.primary{background:var(--accent-soft); border-color:var(--accent-line); color:var(--accent)}
+.suggest{
+  margin-top:13px; font-size:13.5px; background:var(--accent-soft);
+  border:1px solid var(--accent-line); border-radius:8px; padding:10px 13px; color:var(--ink-2);
+}
+.suggest b{color:var(--ink); font-weight:600; display:block; font-size:11px;
+  letter-spacing:.1em; text-transform:uppercase; margin-bottom:3px; font-family:"JetBrains Mono",monospace}
+
+/* ---- timeline ---------------------------------------------------- */
+.day{margin-bottom:26px}
+.daylabel{
+  font-family:"JetBrains Mono",monospace; font-size:11px; font-weight:500;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3);
+  padding-bottom:7px; border-bottom:1px solid var(--line); margin-bottom:4px;
+}
+.tl{position:relative; padding-left:19px}
+.tl::before{content:""; position:absolute; left:4px; top:12px; bottom:12px; width:1px; background:var(--line)}
+.tlrow{display:grid; grid-template-columns:58px 1fr; gap:14px; padding:9px 0; position:relative}
+.tlrow::before{
+  content:""; position:absolute; left:-19px; top:16px; width:9px; height:9px;
+  border-radius:50%; background:var(--surface); border:2px solid var(--line);
+}
+.tlrow[data-sev="crit"]::before{border-color:var(--crit)}
+.tlrow[data-sev="warn"]::before{border-color:var(--warn)}
+.tlrow[data-sev="accent"]::before{border-color:var(--accent)}
+.tlrow .t{font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--ink-3); padding-top:2px}
+.tlrow .c .r{font-family:"JetBrains Mono",monospace; font-size:11.5px; color:var(--ink-3)}
+.tlrow .c .h{font-weight:600; font-size:14.5px; font-family:Archivo,sans-serif; letter-spacing:-.008em}
+.tlrow .c .d{font-size:13px; color:var(--ink-2); margin-top:2px}
+
+.empty-note{color:var(--ink-3); font-size:14px; padding:18px 0}
+footer{
+  margin-top:40px; padding-top:18px; border-top:1px solid var(--line);
+  font-size:12.5px; color:var(--ink-3); display:flex; flex-wrap:wrap; gap:6px 18px;
+}
+@media (max-width:640px){
+  .head{grid-template-columns:1fr}
+  .right{grid-row:auto; flex-direction:row; align-items:center}
+  .tlrow{grid-template-columns:50px 1fr; gap:10px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<header class="masthead"><div class="wrap">
+  <div class="eyebrow" id="eyebrow"></div>
+  <h1 id="headline"></h1>
+  <div class="lede" id="lede-wrap"><div class="bar"></div><p id="lede"></p></div>
+</div></header>
+
+<div class="wrap">
+  <div class="stats" id="stats"></div>
+
+  <div class="toolbar">
+    <div class="seg" role="group" aria-label="View">
+      <button id="v-triage" aria-pressed="true">Triage</button>
+      <button id="v-time" aria-pressed="false">Timeline</button>
+    </div>
+    <input type="search" id="q" placeholder="Filter by title, repo, or person" aria-label="Filter">
+    <select id="repo" aria-label="Repository"></select>
+    <span class="count mono" id="count"></span>
+  </div>
+
+  <main id="triage"></main>
+  <main id="time" hidden></main>
+
+  <footer id="foot"></footer>
+</div>
+
+<script id="briefing-data" type="application/json">__DATA__</script>
+<script>
+const D = JSON.parse(document.getElementById('briefing-data').textContent);
+const items = D.items, notes = D.notes || {};
+const byKey = Object.fromEntries(items.map(i => [i.key, i]));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---- time helpers ------------------------------------------------ */
+const now = new Date(D.generated_at);
+function ago(iso){
+  if(!iso) return '';
+  const m = (now - new Date(iso)) / 60000;
+  if(m < 60) return Math.max(1, Math.round(m)) + 'm ago';
+  if(m < 1440) return Math.round(m/60) + 'h ago';
+  const d = Math.round(m/1440);
+  if(d < 45) return d + 'd ago';
+  return Math.round(d/30) + 'mo ago';
+}
+const clock = iso => new Date(iso).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+const dayOf = iso => new Date(iso).toLocaleDateString([], {weekday:'long', month:'short', day:'numeric'});
+
+/* ---- header ------------------------------------------------------ */
+const s = D.stats;
+document.getElementById('eyebrow').innerHTML = [
+  esc(new Date(D.generated_at).toLocaleDateString([], {weekday:'long', year:'numeric', month:'long', day:'numeric'})),
+  '@' + esc(D.viewer),
+  'briefing #' + s.run_number,
+  esc(D.window_label)
+].map(x => '<span>' + x + '</span>').join('<span aria-hidden="true">·</span>');
+
+document.getElementById('headline').innerHTML = notes.headline
+  ? esc(notes.headline)
+  : (s.waiting_on_you ? s.waiting_on_you + ' thread' + (s.waiting_on_you === 1 ? '' : 's') + ' <span class="dim">waiting on you</span>'
+                      : 'Nothing is <span class="dim">blocked on you</span>');
+if(notes.lede) document.getElementById('lede').innerHTML = notes.lede;
+else document.getElementById('lede-wrap').style.display = 'none';
+
+const STATS = [
+  ['waiting_on_you', 'waiting on you', 'hot'],
+  ['stale', 'overdue', 'hot'],
+  ['unanswered_pings', 'pings unanswered', 'warm'],
+  ['answered', 'you replied', 'good'],
+  ['new_since_last', 'new', ''],
+  ['threads', 'threads', ''],
+  ['repos', 'repos', '']
+];
+document.getElementById('stats').innerHTML = STATS
+  .filter(([k]) => s[k] != null)
+  .map(([k, l, c]) => `<div class="stat ${s[k] ? c : ''}"><div class="n">${s[k]}</div><div class="l">${l}</div></div>`)
+  .join('');
+
+/* ---- rendering --------------------------------------------------- */
+function chipsFor(i){
+  const out = [];
+  if(i.review_requested_of_you) out.push(['accent', 'review pending']);
+  if(i.answered === false) out.push(['crit', 'no reply from you']);
+  if(i.answered === true) out.push(['ok', 'you replied']);
+  if(i.streak >= 3) out.push(['crit', 'surfaced ' + i.streak + '×']);
+  if(i.ci === 'FAILURE') out.push(['crit', 'ci failing']);
+  if(i.ci === 'SUCCESS') out.push(['ok', 'ci green']);
+  if(i.is_draft) out.push(['', 'draft']);
+  if(i.state === 'MERGED') out.push(['ok', 'merged']);
+  if(i.state === 'CLOSED') out.push(['', 'closed']);
+  if(i.you_are_author) out.push(['', 'yours']);
+  if(i.you_are_assignee) out.push(['warn', 'assigned to you']);
+  (i.labels || []).slice(0, 3).forEach(l => out.push(['', l]));
+  return out.map(([c, t]) => `<span class="chip ${c}">${esc(t)}</span>`).join('');
+}
+
+function whatLine(i){
+  const bits = [];
+  if(i.ping && i.ping.by){
+    const verb = i.ping.kind === 'review_request' ? 'asked for your review'
+               : i.ping.kind === 'assignment' ? 'assigned this to you'
+               : 'pinged you';
+    bits.push(`<b>@${esc(i.ping.by)}</b> ${verb} ${esc(ago(i.ping.at))}`);
+  }
+  if(i.answered === false && i.waiting_days != null) bits.push(`no reply for <b>${i.waiting_days}d</b>`);
+  else if(i.answered === true) bits.push(`you answered ${esc(ago(i.you_last_spoke_at))}`);
+  if(!bits.length && i.last_activity) bits.push(`<b>@${esc(i.last_activity.by)}</b> ${esc(i.last_activity.kind.replace('_',' '))}ed ${esc(ago(i.last_activity.at))}`);
+  return bits.join(' · ');
+}
+
+function eventRow(e, viewer){
+  const you = (e.by || '').toLowerCase() === viewer.toLowerCase();
+  const verb = e.kind === 'review' ? (e.state || 'reviewed').toLowerCase().replace('_',' ')
+             : e.kind === 'review_comment' ? 'commented on the diff' : 'commented';
+  const body = e.excerpt ? esc(e.excerpt).replace(new RegExp('@' + viewer, 'ig'), m => '<em>' + m + '</em>') : '<span style="color:var(--ink-3)">(no text)</span>';
+  return `<div class="ev ${you ? 'you' : ''}">
+    <div class="who">${you ? 'you' : '@' + esc(e.by)}<span class="when">${esc(ago(e.at))}</span></div>
+    <div class="what"><a href="${esc(e.url || '#')}" target="_blank" rel="noopener">${esc(verb)}</a> — ${body}</div>
+  </div>`;
+}
+
+function card(i){
+  const note = notes.items && notes.items[i.key];
+  const sev = i.severity || 'none';
+  const crumb = [esc(i.repo), i.number ? `<span class="num">#${i.number}</span>` : '', esc(i.reason_label)]
+    .filter(Boolean).join('<span aria-hidden="true">·</span> ');
+  return `<article class="item" data-sev="${sev}" data-key="${esc(i.key)}" data-hay="${esc((i.title + ' ' + i.repo + ' ' + (i.author||'') + ' ' + ((i.ping||{}).by||'') + ' ' + (i.labels||[]).join(' ')).toLowerCase())}" data-repo="${esc(i.repo)}">
+    <div class="head" role="button" tabindex="0" aria-expanded="false">
+      <div>
+        <div class="crumb">${crumb}</div>
+        <p class="ttl"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></p>
+        <div class="meta">${whatLine(i)}</div>
+        ${note && note.why ? `<div class="note">${esc(note.why)}</div>` : ''}
+        <div class="chips">${chipsFor(i)}</div>
+      </div>
+      <div class="right">
+        <span class="age">${esc(ago(i.notified_at))}</span>
+        <span class="chip ${sev === 'crit' ? 'crit' : sev === 'warn' ? 'warn' : ''}" title="priority score">${i.urgency}</span>
+      </div>
+    </div>
+    <div class="body">
+      ${note && note.action ? `<div class="suggest"><b>Suggested next step</b>${esc(note.action)}</div>` : ''}
+      <div class="thread">${(i.recent || []).slice().reverse().map(e => eventRow(e, D.viewer)).join('') || '<div class="empty-note">No human comments fetched for this one.</div>'}</div>
+      <div class="actions"><a class="btn primary" href="${esc(i.url)}" target="_blank" rel="noopener">Open on GitHub ↗</a></div>
+    </div>
+  </article>`;
+}
+
+document.getElementById('triage').innerHTML = D.groups.map(g => {
+  const rows = g.keys.map(k => card(byKey[k])).join('');
+  return `<section class="group" data-group="${esc(g.id)}">
+    <div class="ghead">
+      <h2><span class="pip" style="background:var(--${g.sev === 'none' ? 'ink-3' : g.sev})"></span>${esc(g.title)}</h2>
+      <span class="sub">${esc(g.blurb)}</span>
+    </div>
+    <div class="rows">${rows}</div>
+  </section>`;
+}).join('') || '<p class="empty-note">Nothing came in. Enjoy the quiet. ☕</p>';
+
+/* timeline */
+const tl = [];
+D.timeline.forEach(k => { const i = byKey[k]; if(i) tl.push(i); });
+let html = '', lastDay = '';
+tl.forEach(i => {
+  const d = dayOf(i.notified_at);
+  if(d !== lastDay){
+    if(lastDay) html += '</div></section>';
+    html += `<section class="day"><div class="daylabel">${esc(d)}</div><div class="tl">`;
+    lastDay = d;
+  }
+  html += `<div class="tlrow" data-sev="${i.severity || 'none'}" data-hay="${esc((i.title + ' ' + i.repo).toLowerCase())}" data-repo="${esc(i.repo)}">
+    <div class="t">${esc(clock(i.notified_at))}</div>
+    <div class="c">
+      <div class="r">${esc(i.repo)}${i.number ? ' #' + i.number : ''} · ${esc(i.reason_label)}</div>
+      <div class="h"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>
+      <div class="d">${whatLine(i)}</div>
+    </div>
+  </div>`;
+});
+if(lastDay) html += '</div></section>';
+document.getElementById('time').innerHTML = html;
+
+/* ---- repo filter ------------------------------------------------- */
+const repoSel = document.getElementById('repo');
+repoSel.innerHTML = '<option value="">All repos</option>' + D.repo_rollup
+  .map(r => `<option value="${esc(r.repo)}">${esc(r.repo)} (${r.count})</option>`).join('');
+
+/* ---- interactions ------------------------------------------------ */
+function applyFilter(){
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  const repo = repoSel.value;
+  let shown = 0;
+  document.querySelectorAll('.item, .tlrow').forEach(el => {
+    const hit = (!q || el.dataset.hay.includes(q)) && (!repo || el.dataset.repo === repo);
+    el.classList.toggle('hidden', !hit);
+    el.style.display = hit ? '' : 'none';
+    if(hit && el.classList.contains('item')) shown++;
+  });
+  document.querySelectorAll('.group').forEach(g => {
+    g.classList.toggle('empty', !g.querySelector('.item:not(.hidden)'));
+  });
+  document.querySelectorAll('.day').forEach(d => {
+    d.style.display = d.querySelector('.tlrow:not(.hidden)') ? '' : 'none';
+  });
+  document.getElementById('count').textContent = shown + ' / ' + items.length + ' threads';
+}
+document.getElementById('q').addEventListener('input', applyFilter);
+repoSel.addEventListener('change', applyFilter);
+
+function toggle(el){
+  const item = el.closest('.item');
+  item.classList.toggle('open');
+  el.setAttribute('aria-expanded', item.classList.contains('open'));
+}
+document.addEventListener('click', e => {
+  if(e.target.closest('a')) return;
+  const h = e.target.closest('.head');
+  if(h) toggle(h);
+});
+document.addEventListener('keydown', e => {
+  if((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('head')){
+    e.preventDefault(); toggle(e.target);
+  }
+  if(e.key === '/' && e.target.tagName !== 'INPUT'){ e.preventDefault(); document.getElementById('q').focus(); }
+});
+
+const vT = document.getElementById('v-triage'), vL = document.getElementById('v-time');
+function view(triage){
+  vT.setAttribute('aria-pressed', triage); vL.setAttribute('aria-pressed', !triage);
+  document.getElementById('triage').hidden = !triage;
+  document.getElementById('time').hidden = triage;
+}
+vT.onclick = () => view(true);
+vL.onclick = () => view(false);
+
+document.getElementById('foot').innerHTML = [
+  'Generated ' + esc(new Date(D.generated_at).toLocaleString()),
+  esc(D.window_label),
+  s.notifications + ' notifications → ' + items.length + ' threads',
+  'Press / to search'
+].map(x => '<span>' + x + '</span>').join('');
+
+applyFilter();
+</script>

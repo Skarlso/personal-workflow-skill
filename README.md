@@ -10,6 +10,14 @@ Two Claude Code plugins for maintainers drowning in GitHub.
 Both publish a clickable page as a Claude Code Artifact, and both keep the raw data
 out of Claude's context by passing it a compact digest instead.
 
+Github briefing:
+![Github Briefing](./imgs/github-briefing.png)
+
+Explain:
+![Explain1](./imgs/summary-1.png)
+![Explain2](./imgs/summary-2.png)
+![Explain3](./imgs/summary-3.png)
+
 ## Install
 
 ```
